@@ -161,3 +161,9 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 }
+
+.HeaderLabel {
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  line-height: 1.1;
+}
