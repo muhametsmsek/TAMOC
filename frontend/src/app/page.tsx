@@ -26,7 +26,7 @@ export default function LandingPage() {
       title: "Instagram Analizi",
       description: "Profilinizi inceletin, içerik stratejinizi ve takipçi etkileşiminizi artıracak AI önerileri alın.",
       icon: LayoutGrid,
-      href: "/dashboard/instagram-analyzer",
+      href: "/instagram-analysis",
       color: "from-pink-500/20 to-rose-500/20",
       iconColor: "text-rose-400"
     },
@@ -34,7 +34,7 @@ export default function LandingPage() {
       title: "Mağaza & Ürün Analizi",
       description: "Shopify/E-ticaret sitenizi taratarak dönüşüm oranını (CRO) artıracak eksiklikleri bulun.",
       icon: Store,
-      href: "/dashboard/store-analyzer",
+      href: "/store-analysis",
       color: "from-emerald-500/20 to-teal-500/20",
       iconColor: "text-teal-400"
     }

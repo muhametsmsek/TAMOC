@@ -175,7 +175,7 @@ export default function Dashboard() {
                   <div>
                     <h4 className="text-sm font-semibold text-white mb-1">Creative Hatası Tespit Edildi</h4>
                     <p className="text-xs text-zinc-400 leading-relaxed">
-                      "Yaz Koleksiyonu" reklamınız düşük performans gösteriyor çünkü ürün ilk 2 saniyede ekranda belirmiyor. Kullanıcıların %68'i ilk 3 saniyede videoyu kaydırıyor.
+                      &quot;Yaz Koleksiyonu&quot; reklamınız düşük performans gösteriyor çünkü ürün ilk 2 saniyede ekranda belirmiyor. Kullanıcıların %68&apos;i ilk 3 saniyede videoyu kaydırıyor.
                     </p>
                     <Badge variant="outline" className="mt-2 border-red-500/30 text-red-400 bg-red-500/10">Action Required</Badge>
                   </div>
