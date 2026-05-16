@@ -1,128 +1,70 @@
 "use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { 
-  BarChart3, 
-  TrendingUp, 
-  Users, 
-  Zap, 
-  LayoutDashboard, 
-  Settings, 
-  Search,
-  BrainCircuit,
-  Eye,
-  MousePointerClick
-} from "lucide-react";
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { Sparkles, Check, TrendingUp, Users, BarChart3, PieChart } from "lucide-react";
 
-// Mock Grafik Verisi
-const data = [
-  { name: 'Pzt', roas: 2.1, spend: 400 },
-  { name: 'Sal', roas: 2.4, spend: 300 },
-  { name: 'Çar', roas: 2.2, spend: 550 },
-  { name: 'Per', roas: 2.8, spend: 450 },
-  { name: 'Cum', roas: 3.2, spend: 600 },
-  { name: 'Cmt', roas: 3.5, spend: 800 },
-  { name: 'Paz', roas: 4.1, spend: 950 },
-];
+export default function CompetitorInsightsPage() {
+  const [url, setUrl] = useState("");
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
 
-export default function Dashboard() {
   return (
-    <div className="flex min-h-screen bg-[#09090b] text-white">
-      {/* Sidebar */}
-      <aside className="w-64 border-r border-zinc-800 bg-[#0c0c0e] p-6 hidden md:flex flex-col">
-        <div className="flex items-center gap-3 mb-12">
-          <div className="bg-primary/20 p-2 rounded-lg">
-            <Zap className="w-6 h-6 text-primary" />
-          </div>
-          <span className="text-xl font-bold tracking-wider">TAMOC<span className="text-primary">.AI</span></span>
+    <div className="min-h-screen bg-[#FCF8F9] text-[#0A0D14] overflow-x-hidden relative font-sans">
+      
+      {/* Navbar (Simplified) */}
+      <nav className="fixed top-0 left-0 w-full z-50 px-4 py-3 pointer-events-none">
+        <div className="max-w-7xl mx-auto h-16 pointer-events-auto flex items-center justify-center">
+          {/* Navigasyon linkleri kaldırıldı */}
         </div>
-        
-        <nav className="space-y-2 flex-1">
-          <Button variant="secondary" className="w-full justify-start gap-3 bg-zinc-800/50 hover:bg-zinc-800 text-white">
-            <LayoutDashboard className="w-4 h-4" /> Dashboard
-          </Button>
-          <Button variant="ghost" className="w-full justify-start gap-3 text-zinc-400 hover:text-white">
-            <BarChart3 className="w-4 h-4" /> Competitor Insights
-          </Button>
-          <Button variant="ghost" className="w-full justify-start gap-3 text-zinc-400 hover:text-white">
-            <Users className="w-4 h-4" /> Audience Analysis
-          </Button>
-        </nav>
-
-        <Button variant="ghost" className="w-full justify-start gap-3 text-zinc-400 mt-auto">
-          <Settings className="w-4 h-4" /> Settings
-        </Button>
-      </aside>
+      </nav>
 
       {/* Main Content */}
-      <main className="flex-1 p-8 overflow-y-auto">
-        <header className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">Competitor Insights AI</h1>
-            <p className="text-zinc-400 mt-1">Yapay zeka odaklı rakip ve reklam analizleri</p>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="relative">
-              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" />
-              <input 
-                type="text" 
-                placeholder="Rakip mağaza analizi..." 
-                className="bg-zinc-900 border border-zinc-800 rounded-full pl-10 pr-4 py-2 text-sm focus:outline-none focus:border-primary transition-colors w-64"
-              />
-            </div>
-            <Button className="bg-primary hover:bg-primary/90 text-white rounded-full px-6">
-              Yeni Analiz Başlat
-            </Button>
-          </div>
-        </header>
+      <main className="relative pt-32 pb-20 px-6 max-w-7xl mx-auto min-h-screen flex flex-col gap-20">
+        
+        {/* Background Gradients */}
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[50%] bg-[#FFEDF4] rounded-full blur-[120px] pointer-events-none opacity-60" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[50%] bg-[#F0F2FF] rounded-full blur-[120px] pointer-events-none opacity-60" />
 
-        {/* KPI Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <Card className="bg-zinc-900/50 border-zinc-800">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-zinc-400">Ortalama ROAS</CardTitle>
-              <TrendingUp className="w-4 h-4 text-emerald-400" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">3.24x</div>
-              <p className="text-xs text-emerald-400 mt-1">+14% geçen haftaya göre</p>
-            </CardContent>
-          </Card>
-          <Card className="bg-zinc-900/50 border-zinc-800">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-zinc-400">Tıklama Oranı (CTR)</CardTitle>
-              <MousePointerClick className="w-4 h-4 text-blue-400" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">%4.12</div>
-              <p className="text-xs text-blue-400 mt-1">+2.1% sektör ortalamasının üstünde</p>
-            </CardContent>
-          </Card>
-          <Card className="bg-zinc-900/50 border-zinc-800">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-zinc-400">Gösterim (Impression)</CardTitle>
-              <Eye className="w-4 h-4 text-purple-400" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">1.2M</div>
-              <p className="text-xs text-zinc-500 mt-1">Son 7 gün</p>
-            </CardContent>
-          </Card>
-          <Card className="bg-zinc-900/50 border-zinc-800 relative overflow-hidden">
-            <div className="absolute right-0 top-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl"></div>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-primary">AI Score</CardTitle>
-              <BrainCircuit className="w-4 h-4 text-primary" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-white">92/100</div>
-              <p className="text-xs text-primary mt-1">Mükemmel reklam sağlığı</p>
-            </CardContent>
-          </Card>
+        {/* HERO SECTION */}
+        <div className="flex flex-col gap-10 items-start relative z-10 max-w-2xl mx-auto lg:mx-0">
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+            <h1 className="HeaderLabel text-4xl md:text-6xl text-[#0A0D14] mb-4">
+              Rakiplerinizi Analiz Edin ve<br />
+              Kreatiflerinizi Güçlendirin
+            </h1>
+            <p className="text-[#4B5563] text-lg leading-relaxed max-w-md font-medium opacity-80">
+              Rakiplerinizin reklam stratejilerini çözün, en çok kazandıran kreatiflerini keşfedin ve pazar payınızı artırın.
+            </p>
+          </motion.div>
+
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.5 }}
+            className="w-full max-w-md"
+          >
+            {/* URL Input Area */}
+            <div className="bg-white p-6 rounded-[2.5rem] shadow-[0_30px_60px_rgba(0,0,0,0.04)] border border-white flex flex-col gap-5 transition-all">
+              <div className="relative">
+                <input 
+                  type="text"
+                  value={url}
+                  onChange={(e) => setUrl(e.target.value)}
+                  placeholder="https://rakibinizin-adresi.com"
+                  className="w-full bg-slate-50/50 border border-slate-100 rounded-2xl py-4 px-6 text-[#0A0D14] placeholder:text-slate-300 font-bold text-sm focus:ring-2 focus:ring-[#ED2970]/10 transition-all outline-none"
+                />
+              </div>
+              <button 
+                onClick={() => setIsAnalyzing(true)}
+                className="bg-[#ED2970] text-white px-6 py-4 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] hover:bg-[#D52464] transition-all shadow-xl shadow-[#ED2970]/20 flex items-center justify-center gap-2"
+              >
+                {isAnalyzing ? "Analiz Ediliyor..." : "Hemen Analiz Et"}
+                <Sparkles className="w-3 h-3" />
+              </button>
+            </div>
+          </motion.div>
         </div>
+
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Chart Section */}
@@ -176,30 +118,127 @@ export default function Dashboard() {
                     <h4 className="text-sm font-semibold text-white mb-1">Creative Hatası Tespit Edildi</h4>
                     <p className="text-xs text-zinc-400 leading-relaxed">
                       &quot;Yaz Koleksiyonu&quot; reklamınız düşük performans gösteriyor çünkü ürün ilk 2 saniyede ekranda belirmiyor. Kullanıcıların %68&apos;i ilk 3 saniyede videoyu kaydırıyor.
-                    </p>
-                    <Badge variant="outline" className="mt-2 border-red-500/30 text-red-400 bg-red-500/10">Action Required</Badge>
-                  </div>
-                </div>
-              </div>
 
-              <div className="bg-black/40 border border-primary/20 rounded-lg p-4">
-                <div className="flex items-start gap-3">
-                  <div className="bg-primary/20 p-1.5 rounded-full mt-0.5">
-                    <span className="w-2 h-2 rounded-full bg-primary block"></span>
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-semibold text-white mb-1">CRO Fırsatı</h4>
-                    <p className="text-xs text-zinc-400 leading-relaxed">
-                      Rakip analizi: Bu ürün tipi için UGC (Kullanıcı Üretimi İçerik) tarzı testimonial videolar %42 daha yüksek dönüşüm sağlıyor.
                     </p>
-                    <Badge variant="outline" className="mt-2 border-primary/30 text-primary bg-primary/10">Suggestion</Badge>
-                  </div>
-                </div>
-              </div>
+                    
+                    <div className="space-y-4">
+                       <div className="flex items-center gap-4 text-slate-700 font-bold">
+                          <Check className="w-5 h-5 text-[#ED2970] stroke-[4px]" />
+                          <span>En iyi performans gösteren rakip reklamları belirleyin</span>
+                       </div>
+                       <div className="flex items-center gap-4 text-slate-700 font-bold">
+                          <Check className="w-5 h-5 text-[#ED2970] stroke-[4px]" />
+                          <span>Platformlar arası reklam performansını analiz edin</span>
+                       </div>
+                       <div className="flex items-center gap-4 text-slate-700 font-bold">
+                          <Check className="w-5 h-5 text-[#ED2970] stroke-[4px]" />
+                          <span>Pazarlama stratejilerinizde bir adım önde olun</span>
+                       </div>
+                    </div>
+                 </div>
 
-            </CardContent>
-          </Card>
-        </div>
+                 {/* Right Column: Visual Dashboard Mockup */}
+                 <div className="bg-[#FAF9FB] rounded-[3.5rem] p-8 md:p-12 border border-slate-50 relative flex flex-col gap-8 shadow-inner overflow-visible">
+                    
+                    {/* Top KPI Cards */}
+                    <div className="grid grid-cols-3 gap-3">
+                       <div className="bg-white p-4 rounded-3xl border border-white shadow-sm">
+                          <div className="flex justify-between items-center mb-2">
+                             <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Benzersiz Ziyaretçiler</span>
+                             <Users className="w-3 h-3 text-slate-100" />
+                          </div>
+                          <div className="text-xl font-black text-slate-900 leading-none">15K</div>
+                          <div className="text-[7px] text-emerald-500 font-bold mt-1">↑ 29.24%</div>
+                       </div>
+                       <div className="bg-white p-4 rounded-3xl border border-white shadow-sm">
+                          <div className="flex justify-between items-center mb-2">
+                             <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Ziyaret Sayısı</span>
+                             <TrendingUp className="w-3 h-3 text-slate-100" />
+                          </div>
+                          <div className="text-xl font-black text-slate-900 leading-none">65K</div>
+                          <div className="text-[7px] text-emerald-500 font-bold mt-1">↑ 13.56%</div>
+                       </div>
+                       <div className="bg-white p-4 rounded-3xl border border-white shadow-sm">
+                          <div className="flex justify-between items-center mb-2">
+                             <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Hemen Çıkma Oranı</span>
+                             <PieChart className="w-3 h-3 text-slate-100" />
+                          </div>
+                          <div className="text-xl font-black text-slate-900 leading-none">74%</div>
+                          <div className="text-[7px] text-rose-500 font-bold mt-1">↑ 22.65%</div>
+                       </div>
+                    </div>
+
+                    {/* Gender & Age Stats */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                       <div className="bg-white p-6 rounded-3xl border border-white shadow-sm space-y-4">
+                          <div className="text-[10px] font-black text-slate-800 uppercase tracking-widest italic">Cinsiyet</div>
+                          <div className="h-6 w-full bg-slate-50 rounded-full overflow-hidden flex relative p-1">
+                             <div className="h-full bg-[#ED2970] w-[42%] rounded-full flex items-center px-3 text-[8px] font-black text-white italic">42%</div>
+                             <div className="h-full flex-1 flex items-center justify-end px-3 text-[8px] font-bold text-slate-400">58%</div>
+                          </div>
+                       </div>
+                       <div className="bg-white p-6 rounded-3xl border border-white shadow-sm space-y-4">
+                          <div className="flex justify-between items-center">
+                             <span className="text-[10px] font-black text-slate-800 uppercase tracking-widest italic">Yaş Dağılımı</span>
+                             <div className="bg-slate-900 text-white text-[7px] font-bold px-1.5 py-0.5 rounded">34.4%</div>
+                          </div>
+                          <div className="flex items-end justify-between h-8 gap-2 px-1">
+                             {[
+                                { label: "18-24", h: 30 },
+                                { label: "24-30", h: 100, active: true },
+                                { label: "30-40", h: 60 },
+                                { label: "40-50", h: 40 },
+                                { label: "50-60", h: 30 },
+                                { label: "60+", h: 20 }
+                             ].map((item, i) => (
+                                <div key={i} className="flex-1 flex flex-col gap-1 items-center">
+                                   <div 
+                                      className={`w-full rounded-sm transition-all duration-700 ${item.active ? 'bg-[#ED2970]' : 'bg-slate-100'}`} 
+                                      style={{ height: `${item.h}%` }}
+                                   ></div>
+                                </div>
+                             ))}
+                          </div>
+                       </div>
+                    </div>
+                 </div>
+
+              </div>
+           </motion.div>
+        </section>
+
+        {/* --- SECTION 2: COMPREHENSIVE VISITOR ANALYSIS --- */}
+        <section className="relative z-10">
+           <motion.div 
+             initial={{ opacity: 0, y: 30 }}
+             whileInView={{ opacity: 1, y: 0 }}
+             viewport={{ once: true }}
+             transition={{ duration: 0.8 }}
+             className="bg-white rounded-[4rem] p-8 md:p-16 shadow-[0_50px_120px_rgba(0,0,0,0.06)] border border-white relative overflow-visible"
+           >
+              <div className="flex flex-col justify-center max-w-4xl mx-auto text-center items-center overflow-visible">
+                 {/* Pink Sub-header removed as requested */}
+                 <h2 className="HeaderLabel text-3xl md:text-5xl text-[#0A0D14] mb-8 leading-[1.1]">
+                    Kapsamlı ziyaretçi analizleri
+                 </h2>
+                 <p className="text-[#4B5563] text-lg leading-relaxed mb-10 font-medium opacity-80">
+                    Rakiplerinizin toplam ziyaretçi sayısını, ziyaretçi demografisini, en iyi trafik kanallarını, konumlarını ve açılış sayfalarını tahmin etmek için Rakip Analizleri Yapay Zekamızı kullanın. Bu derinlemesine verilerle, hedef kitlelerini ve trafik kaynaklarını daha iyi anlayabilir, stratejilerinizi geliştirmenize ve daha fazla pazar payı elde etmenize olanak tanır.
+                 </p>
+                 
+                 <div className="space-y-4 flex flex-col items-center">
+                    <div className="flex items-center gap-4 text-slate-700 font-bold">
+                       <Check className="w-5 h-5 text-[#ED2970] stroke-[4px]" />
+                       <span>En çok trafik çeken kanalları ve konumları belirleyin</span>
+                    </div>
+                    <div className="flex items-center gap-4 text-slate-700 font-bold">
+                       <Check className="w-5 h-5 text-[#ED2970] stroke-[4px]" />
+                       <span>Rakiplerin en iyi açılış sayfalarını ortaya çıkarın</span>
+                    </div>
+                 </div>
+              </div>
+           </motion.div>
+        </section>
+
       </main>
     </div>
   );
