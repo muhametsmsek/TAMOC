@@ -2,7 +2,19 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Sparkles, Check, TrendingUp, Users, BarChart3, PieChart } from "lucide-react";
+import { Sparkles, Check, TrendingUp, Users, BarChart3, PieChart, BrainCircuit } from "lucide-react";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { ResponsiveContainer, CartesianGrid, XAxis, YAxis, Tooltip, Area, AreaChart } from "recharts";
+
+const chartData = [
+  { name: '1. Hafta', roas: 2.4 },
+  { name: '2. Hafta', roas: 3.1 },
+  { name: '3. Hafta', roas: 2.8 },
+  { name: '4. Hafta', roas: 4.2 },
+  { name: '5. Hafta', roas: 3.9 },
+  { name: '6. Hafta', roas: 5.1 },
+  { name: '7. Hafta', roas: 4.8 },
+];
 
 export default function CompetitorInsightsPage() {
   const [url, setUrl] = useState("");
@@ -76,7 +88,7 @@ export default function CompetitorInsightsPage() {
             <CardContent>
               <div className="h-[300px] w-full mt-4">
                 <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={data} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                  <AreaChart data={chartData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                     <defs>
                       <linearGradient id="colorRoas" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3}/>
@@ -136,9 +148,15 @@ export default function CompetitorInsightsPage() {
                        </div>
                     </div>
                  </div>
+               </div>
+             </div>
+           </CardContent>
+         </Card>
+       </div>
 
-                 {/* Right Column: Visual Dashboard Mockup */}
-                 <div className="bg-[#FAF9FB] rounded-[3.5rem] p-8 md:p-12 border border-slate-50 relative flex flex-col gap-8 shadow-inner overflow-visible">
+       {/* Right Column: Visual Dashboard Mockup */}
+       <section className="relative z-10">
+         <div className="bg-[#FAF9FB] rounded-[3.5rem] p-8 md:p-12 border border-slate-50 relative flex flex-col gap-8 shadow-inner overflow-visible">
                     
                     {/* Top KPI Cards */}
                     <div className="grid grid-cols-3 gap-3">
@@ -202,12 +220,7 @@ export default function CompetitorInsightsPage() {
                        </div>
                     </div>
                  </div>
-
-              </div>
-           </motion.div>
-        </section>
-
-        {/* --- SECTION 2: COMPREHENSIVE VISITOR ANALYSIS --- */}
+            </section>
         <section className="relative z-10">
            <motion.div 
              initial={{ opacity: 0, y: 30 }}
