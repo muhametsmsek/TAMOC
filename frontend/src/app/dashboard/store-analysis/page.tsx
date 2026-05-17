@@ -120,8 +120,8 @@ export default function StoreAnalysisPage() {
             </div>
           </div>
 
-          {/* Dynamic Content Area (Placeholder or Result) */}
-          <div className="relative mt-8 min-h-[350px]">
+          {/* Dynamic Content Area (Result) */}
+          <div className="relative mt-2">
             <AnimatePresence mode="wait">
               {error && (
                 <motion.div
@@ -135,54 +135,7 @@ export default function StoreAnalysisPage() {
                 </motion.div>
               )}
 
-              {!result && !error && !isAnalyzing && (
-                <motion.div
-                  key="placeholder"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center"
-                >
-                  {/* Left Mock List */}
-                  <div className="flex flex-col gap-6 pl-2">
-                    {[
-                      { title: "Ana Sayfa Düzeni", desc: "Kullanıcı deneyimi & hız" },
-                      { title: "Ürün Görselleri", desc: "Kalite & UGC eksiklikleri" },
-                      { title: "Dönüşüm & CTA", desc: "Satın alma akışı analizi" },
-                    ].map((item, i) => (
-                      <div key={i} className="flex gap-3 items-start">
-                        <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 mt-1.5 shrink-0 shadow-[0_0_10px_rgba(52,211,153,0.5)]" />
-                        <div className="flex flex-col">
-                          <span className="font-bold text-slate-800 text-sm">{item.title}</span>
-                          <span className="text-xs text-slate-500 font-medium leading-relaxed mt-0.5">{item.desc}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  
-                  {/* Right Mockup Graphic */}
-                  <div className="bg-white rounded-[2rem] p-4 shadow-sm border border-white/50 h-64 relative overflow-hidden flex flex-col group">
-                     <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-purple-50/50 opacity-50" />
-                     <div className="w-16 h-2 bg-slate-200 rounded-full mx-auto mb-4 relative z-10" />
-                     <div className="w-3/4 h-3 bg-slate-100 rounded-full mx-auto mb-6 relative z-10" />
-                     
-                     <div className="grid grid-cols-2 gap-3 relative z-10">
-                        <div className="bg-slate-50 h-24 rounded-xl border border-slate-100/50 flex items-center justify-center group-hover:scale-105 transition-transform">
-                           <LayoutTemplate className="w-6 h-6 text-slate-300" />
-                        </div>
-                        <div className="bg-slate-50 h-24 rounded-xl border border-slate-100/50 flex items-center justify-center group-hover:scale-105 transition-transform delay-75">
-                           <ShoppingCart className="w-6 h-6 text-slate-300" />
-                        </div>
-                        <div className="bg-slate-50 h-24 rounded-xl border border-slate-100/50 flex items-center justify-center group-hover:scale-105 transition-transform">
-                           <Zap className="w-6 h-6 text-slate-300" />
-                        </div>
-                        <div className="bg-slate-50 h-24 rounded-xl border border-slate-100/50 flex items-center justify-center group-hover:scale-105 transition-transform delay-75">
-                           <Globe className="w-6 h-6 text-slate-300" />
-                        </div>
-                     </div>
-                  </div>
-                </motion.div>
-              )}
+
 
               {isAnalyzing && (
                 <motion.div
@@ -295,6 +248,127 @@ export default function StoreAnalysisPage() {
               )}
             </AnimatePresence>
           </div>
+        </motion.div>
+
+      </div>
+
+      {/* NEW SECTION: Competitor Insights */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center mt-32 mb-16">
+        
+        {/* LEFT COLUMN: Copywriting & Benefits */}
+        <motion.div 
+          initial={{ opacity: 0, x: -30 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6 }}
+          className="flex flex-col gap-6 order-2 lg:order-1"
+        >
+          <div className="flex flex-col gap-2">
+            <h3 className="text-[#ED2970] font-black text-lg md:text-xl tracking-tight">
+              Verilerinize Ve Rakiplerinize Hakim Olun
+            </h3>
+            <h1 className="HeaderLabel text-4xl md:text-6xl text-[#0A0D14] leading-[1.1]">
+              Rekabetçi İçgörüler ile <br className="hidden md:block"/> her zaman önde olun
+            </h1>
+          </div>
+
+          <p className="text-[#4B5563] text-lg leading-relaxed font-medium opacity-80 max-w-lg mt-2">
+            E-ticaret reklam hesaplarınızı bağlayın ve yapay zekamızın her bir reklam öğesini analiz ederek hangi türlerin işletmeniz için en iyi performansı gösterdiğine dair net bir görünürlük sağlamasına izin verin. Rakiplerinizden tek bir URL alarak en iyi performans gösteren reklamlarını görüntüleyin ve mağazalarının satışları hangi noktalara yönlendirdiğini keşfedin. Derin içgörüler ve rekabet analizi ile her zaman bir adım önde olun.
+          </p>
+
+          <div className="flex flex-col gap-4 mt-6">
+            <div className="flex gap-4 items-start">
+              <div className="mt-1">
+                <Check className="w-5 h-5 text-[#4B5563] opacity-60 stroke-[3px]" />
+              </div>
+              <span className="text-[#4B5563] font-medium text-lg">
+                Markanız için neyin işe yaradığını anlayın
+              </span>
+            </div>
+            <div className="flex gap-4 items-start">
+              <div className="mt-1">
+                <Check className="w-5 h-5 text-[#4B5563] opacity-60 stroke-[3px]" />
+              </div>
+              <span className="text-[#4B5563] font-medium text-lg">
+                Rakiplerinizin en iyi reklamlarını ortaya çıkarın
+              </span>
+            </div>
+            <div className="flex gap-4 items-start">
+              <div className="mt-1">
+                <Check className="w-5 h-5 text-[#4B5563] opacity-60 stroke-[3px]" />
+              </div>
+              <span className="text-[#4B5563] font-medium text-lg">
+                Optimum sonuçlar için veri destekli kararlar alın
+              </span>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* RIGHT COLUMN: Interactive Dashboard Mockup */}
+        <motion.div 
+          initial={{ opacity: 0, x: 30 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="bg-[#EBE7EE] rounded-[2.5rem] p-6 md:p-8 border border-slate-100 shadow-inner w-full flex flex-col gap-4 overflow-hidden order-1 lg:order-2 relative"
+        >
+          {/* Top row: 3 stat cards */}
+          <div className="grid grid-cols-3 gap-3 relative z-10">
+            <div className="bg-white rounded-2xl p-4 shadow-sm flex flex-col justify-between hover:-translate-y-1 transition-transform">
+               <span className="text-xs font-bold text-slate-800 leading-tight mb-2">Benzersiz<br/>Ziyaretçiler</span>
+               <div className="flex items-end justify-between mt-2">
+                 <span className="text-2xl font-black text-slate-900">15K</span>
+                 <span className="text-[10px] font-bold text-emerald-500 mb-1">↑ 29.24%</span>
+               </div>
+            </div>
+            <div className="bg-white rounded-2xl p-4 shadow-sm flex flex-col justify-between hover:-translate-y-1 transition-transform">
+               <span className="text-xs font-bold text-slate-800 leading-tight mb-2">Ziyaret Sayısı</span>
+               <div className="flex items-end justify-between mt-auto">
+                 <span className="text-2xl font-black text-slate-900">65K</span>
+                 <span className="text-[10px] font-bold text-emerald-500 mb-1">↑ 13.56%</span>
+               </div>
+            </div>
+            <div className="bg-white rounded-2xl p-4 shadow-sm flex flex-col justify-between hover:-translate-y-1 transition-transform">
+               <span className="text-xs font-bold text-slate-800 leading-tight mb-2">Hemen Çıkma<br/>Oranı</span>
+               <div className="flex items-end justify-between mt-2">
+                 <span className="text-2xl font-black text-slate-900">74%</span>
+                 <span className="text-[10px] font-bold text-rose-500 mb-1">↑ 22.65%</span>
+               </div>
+            </div>
+          </div>
+
+          {/* Middle row: Demographics */}
+          <div className="grid grid-cols-2 gap-4 relative z-10">
+            <div className="bg-white rounded-2xl p-4 shadow-sm flex flex-col">
+              <span className="text-xs font-bold text-slate-800 mb-4">Cinsiyet</span>
+              <div className="flex w-full h-8 rounded-lg overflow-hidden mt-auto">
+                 <div className="bg-[#ED2970] h-full flex items-center justify-start px-2 w-[42%]">
+                    <span className="text-white text-[10px] font-bold">♀ 42%</span>
+                 </div>
+                 <div className="bg-slate-100 h-full flex items-center justify-end px-2 w-[58%]">
+                    <span className="text-slate-600 text-[10px] font-bold">58% ♂</span>
+                 </div>
+              </div>
+            </div>
+            <div className="bg-white rounded-2xl p-4 shadow-sm flex flex-col relative overflow-hidden">
+              <span className="text-xs font-bold text-slate-800 mb-4 relative z-10">Yaş</span>
+              <div className="flex items-end justify-between gap-1.5 h-12 w-full mt-auto relative z-10">
+                 <div className="w-full bg-slate-100 rounded-t h-[30%]"></div>
+                 <div className="w-full bg-slate-100 rounded-t h-[50%]"></div>
+                 <div className="w-full bg-[#1e1b4b] rounded-t h-[90%] relative">
+                    <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-[#1e1b4b] text-white text-[7px] font-bold px-1.5 py-0.5 rounded">34.4%</div>
+                 </div>
+                 <div className="w-full bg-slate-100 rounded-t h-[60%]"></div>
+                 <div className="w-full bg-slate-100 rounded-t h-[40%]"></div>
+                 <div className="w-full bg-slate-100 rounded-t h-[20%]"></div>
+              </div>
+            </div>
+          </div>
+
+
+
+          {/* Decorative swoosh */}
+          <div className="absolute bottom-0 left-0 right-0 h-32 bg-white rounded-t-[100%] scale-150 translate-y-16 opacity-30 pointer-events-none" />
         </motion.div>
 
       </div>
