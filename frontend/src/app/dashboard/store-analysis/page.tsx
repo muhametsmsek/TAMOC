@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, Check, Share2, Globe, Search, LayoutTemplate, Zap, ShoppingCart } from "lucide-react";
+import { Loader2, Check, Share2, Globe, Search, LayoutTemplate, Zap, ShoppingCart, CheckCircle2, TrendingUp, AlertTriangle, Lightbulb } from "lucide-react";
 
 export default function StoreAnalysisPage() {
   const [storeUrl, setStoreUrl] = useState("");
@@ -202,11 +202,11 @@ export default function StoreAnalysisPage() {
                   key="result"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="bg-white rounded-[2rem] p-6 shadow-md border border-slate-100 overflow-hidden relative"
+                  className="bg-white rounded-[2rem] p-6 shadow-md border border-slate-100 relative"
                 >
                   <div className="absolute top-0 right-0 w-32 h-32 bg-[#ED2970]/5 rounded-full blur-[40px] pointer-events-none" />
                   
-                  <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center justify-between mb-6">
                     <h4 className="HeaderLabel text-xl text-slate-800">Analiz Sonucu</h4>
                     <div className="flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-600 rounded-full text-[10px] font-black uppercase tracking-wider">
                        <CheckCircle2 className="w-3.5 h-3.5" />
@@ -214,17 +214,83 @@ export default function StoreAnalysisPage() {
                     </div>
                   </div>
                   
-                  <div className="h-64 overflow-y-auto custom-scrollbar bg-slate-50 p-4 rounded-xl border border-slate-100 text-xs font-mono text-slate-700">
-                    <pre className="whitespace-pre-wrap">{JSON.stringify(result, null, 2)}</pre>
-                  </div>
+                  <div className="h-[400px] overflow-y-auto custom-scrollbar pr-2 flex flex-col gap-6">
+                    {/* Score & Summary */}
+                    <div className="flex items-start gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                      <div className="flex flex-col items-center justify-center bg-white w-20 h-20 rounded-xl shadow-sm shrink-0 border border-slate-50">
+                        <span className="text-3xl font-black text-[#ED2970]">{result.overallScore}</span>
+                        <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">Skor</span>
+                      </div>
+                      <div className="flex flex-col">
+                        <h5 className="font-bold text-slate-800 text-sm mb-1">{result.storeName}</h5>
+                        <p className="text-xs text-slate-500 font-medium leading-relaxed italic">
+                          "{result.summary}"
+                        </p>
+                      </div>
+                    </div>
 
-                  <button
-                    onClick={() => navigator.clipboard.writeText(JSON.stringify(result, null, 2))}
-                    className="mt-4 w-full flex items-center justify-center gap-2 text-[#ED2970] font-black text-xs uppercase tracking-wider py-3 bg-rose-50 hover:bg-rose-100 transition-colors rounded-xl"
-                  >
-                    <Share2 className="w-4 h-4" />
-                    <span>Sonuçları Kopyala</span>
-                  </button>
+                    {/* Critical Issues */}
+                    {result.criticalIssues && result.criticalIssues.length > 0 && (
+                      <div className="flex flex-col gap-3">
+                        <h5 className="text-xs font-black uppercase tracking-wider text-rose-500 flex items-center gap-1.5">
+                          <AlertTriangle className="w-3.5 h-3.5" /> Kritik Hatalar
+                        </h5>
+                        {result.criticalIssues.map((issue: any, idx: number) => (
+                          <div key={idx} className="bg-rose-50/50 border border-rose-100 p-4 rounded-2xl flex flex-col gap-1.5">
+                            <span className="font-bold text-sm text-rose-700">{issue.issue}</span>
+                            <span className="text-xs text-rose-600/80 font-medium leading-relaxed">{issue.detail}</span>
+                            <div className="mt-2 bg-white px-3 py-2 rounded-xl border border-rose-100 text-[11px] font-medium text-slate-600 flex gap-2 items-start shadow-sm">
+                              <span className="text-emerald-500 font-black">Çözüm:</span> {issue.fix}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Quick Wins */}
+                    {result.quickWins && result.quickWins.length > 0 && (
+                      <div className="flex flex-col gap-3">
+                        <h5 className="text-xs font-black uppercase tracking-wider text-[#ED2970] flex items-center gap-1.5">
+                          <TrendingUp className="w-3.5 h-3.5" /> Hızlı Kazanımlar
+                        </h5>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          {result.quickWins.map((win: any, idx: number) => (
+                            <div key={idx} className="bg-white border border-[#ED2970]/15 p-4 rounded-2xl shadow-sm flex flex-col hover:border-[#ED2970]/40 transition-colors">
+                              <span className="font-bold text-sm text-slate-800">{win.action}</span>
+                              <div className="flex justify-between mt-3 text-[9px] font-black uppercase tracking-wider text-slate-400">
+                                <span>Etki: <span className="text-[#ED2970]">{win.impact}</span></span>
+                                <span>{win.timeframe}</span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* AI Recommendations */}
+                    {result.aiRecommendations && result.aiRecommendations.length > 0 && (
+                      <div className="flex flex-col gap-3">
+                        <h5 className="text-xs font-black uppercase tracking-wider text-purple-600 flex items-center gap-1.5">
+                          <Lightbulb className="w-3.5 h-3.5" /> AI Büyüme Fırsatları
+                        </h5>
+                        {result.aiRecommendations.map((rec: any, idx: number) => (
+                          <div key={idx} className="bg-purple-50/40 border border-purple-100 p-4 rounded-2xl flex flex-col gap-1.5">
+                            <span className="font-bold text-sm text-purple-800">{rec.title}</span>
+                            <span className="text-xs text-purple-600/80 font-medium leading-relaxed">{rec.detail}</span>
+                            {rec.tools && rec.tools.length > 0 && (
+                              <div className="mt-2 flex flex-wrap gap-2">
+                                {rec.tools.map((tool: string, tIdx: number) => (
+                                  <span key={tIdx} className="bg-white px-2.5 py-1 rounded-lg border border-purple-100 text-[10px] font-black text-purple-600 uppercase shadow-sm">
+                                    {tool}
+                                  </span>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
