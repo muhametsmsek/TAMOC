@@ -114,7 +114,15 @@ export default function CompetitorInsightsPage() {
           <Card className="col-span-2 bg-white shadow-xl shadow-slate-200/40 border-slate-100/60 rounded-[2rem] overflow-hidden">
             <CardHeader className="pb-2">
               <CardTitle className="text-slate-800 font-bold text-xl">Performans Trendi (ROAS vs Harcama)</CardTitle>
-              <CardDescription className="text-slate-500 font-medium">Sektörel rakiplerinizle kıyaslamalı haftalık bazda reklam getirisi.</CardDescription>
+              <CardDescription className="text-slate-500 font-medium flex flex-col gap-2">
+                <span>Sektörel rakiplerinizle kıyaslamalı haftalık bazda reklam getirisi.</span>
+                <span className="text-[12px] text-slate-400 font-medium bg-slate-50 border border-slate-100 p-2 rounded-lg inline-block w-fit">
+                  <strong className="text-slate-600">ROAS (Return on Ad Spend):</strong> Reklam Harcamalarının Getirisi
+                  <span className="block mt-1 font-mono text-slate-500 text-[11px] bg-white px-2 py-1 rounded border border-slate-200">
+                    Formül: Reklamdan Elde Edilen Gelir / Reklam Harcaması
+                  </span>
+                </span>
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="h-[300px] w-full mt-4">
