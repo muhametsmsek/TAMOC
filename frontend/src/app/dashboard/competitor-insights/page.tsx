@@ -4,18 +4,63 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Sparkles, Check, TrendingUp, Users, BarChart3, PieChart, BrainCircuit } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { ResponsiveContainer, AreaChart, CartesianGrid, XAxis, YAxis, Tooltip, Area } from "recharts";
+import { ResponsiveContainer, CartesianGrid, XAxis, YAxis, Tooltip, Area, AreaChart } from "recharts";
 
-const data = [
-  { name: "Hafta 1", roas: 1.2 },
-  { name: "Hafta 2", roas: 1.5 },
-  { name: "Hafta 3", roas: 2.1 },
-  { name: "Hafta 4", roas: 2.8 },
+const defaultChartData = [
+  { name: '1. Hafta', roas: 2.4 },
+  { name: '2. Hafta', roas: 3.1 },
+  { name: '3. Hafta', roas: 2.8 },
+  { name: '4. Hafta', roas: 4.2 },
+  { name: '5. Hafta', roas: 3.9 },
+  { name: '6. Hafta', roas: 5.1 },
+  { name: '7. Hafta', roas: 4.8 },
 ];
 
 export default function CompetitorInsightsPage() {
   const [url, setUrl] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analysisResult, setAnalysisResult] = useState<any>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [chartData, setChartData] = useState(defaultChartData);
+
+  const handleAnalyze = async () => {
+    if (!url) return;
+    setIsAnalyzing(true);
+    setAnalysisResult(null); // Önceki sonuçları temizle
+    setErrorMsg(null); // Varsa önceki hatayı temizle
+    // Analiz başlarken grafiği boş veya bekleyen hale getirebiliriz ama görsel güzel kalsın diye varsayılanda bırakabiliriz.
+    
+    try {
+      const res = await fetch('/api/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url })
+      });
+      const data = await res.json();
+      if (!res.ok || data.error) {
+        throw new Error(data.error || "Analiz sırasında bir hata oluştu.");
+      }
+      setAnalysisResult(data);
+      
+      // API'den dönen tahmini ROAS verisini grafiğe yansıt
+      if (data.estimated_roas_trend && Array.isArray(data.estimated_roas_trend)) {
+        const newChartData = data.estimated_roas_trend.map((val: number, index: number) => ({
+          name: `${index + 1}. Hafta`,
+          roas: val
+        }));
+        setChartData(newChartData);
+      }
+    } catch (error: any) {
+      console.error("Analiz hatası:", error);
+      let friendlyError = error.message || "Analiz sırasında bir hata oluştu.";
+      if (friendlyError.toLowerCase().includes("quota") || friendlyError.toLowerCase().includes("429") || friendlyError.toLowerCase().includes("too many requests")) {
+        friendlyError = "Günlük ücretsiz yapay zeka analiz limitinize ulaştınız. Lütfen yarın tekrar deneyin veya farklı bir API anahtarı kullanın.";
+      }
+      setErrorMsg(friendlyError);
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#FCF8F9] text-[#0A0D14] overflow-x-hidden relative font-sans">
@@ -64,8 +109,9 @@ export default function CompetitorInsightsPage() {
                 />
               </div>
               <button 
-                onClick={() => setIsAnalyzing(true)}
-                className="bg-[#ED2970] text-white px-6 py-4 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] hover:bg-[#D52464] transition-all shadow-xl shadow-[#ED2970]/20 flex items-center justify-center gap-2"
+                onClick={handleAnalyze}
+                disabled={isAnalyzing || !url}
+                className="bg-[#ED2970] text-white px-6 py-4 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] hover:bg-[#D52464] disabled:opacity-50 transition-all shadow-xl shadow-[#ED2970]/20 flex items-center justify-center gap-2"
               >
                 {isAnalyzing ? "Analiz Ediliyor..." : "Hemen Analiz Et"}
                 <Sparkles className="w-3 h-3" />
@@ -77,29 +123,38 @@ export default function CompetitorInsightsPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Chart Section */}
-          <Card className="col-span-2 bg-zinc-900/50 border-zinc-800">
-            <CardHeader>
-              <CardTitle>Performans Trendi (ROAS vs Harcama)</CardTitle>
-              <CardDescription>Sektörel rakiplerinizle kıyaslamalı haftalık bazda reklam getirisi.</CardDescription>
+          <Card className="col-span-2 bg-white shadow-xl shadow-slate-200/40 border-slate-100/60 rounded-[2rem] overflow-hidden">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-slate-800 font-bold text-xl">Performans Trendi (ROAS vs Harcama)</CardTitle>
+              <CardDescription className="text-slate-500 font-medium flex flex-col gap-2">
+                <span>Sektörel rakiplerinizle kıyaslamalı haftalık bazda reklam getirisi.</span>
+                <span className="text-[12px] text-slate-400 font-medium bg-slate-50 border border-slate-100 p-2 rounded-lg inline-block w-fit">
+                  <strong className="text-slate-600">ROAS (Return on Ad Spend):</strong> Reklam Harcamalarının Getirisi
+                  <span className="block mt-1 font-mono text-slate-500 text-[11px] bg-white px-2 py-1 rounded border border-slate-200">
+                    Formül: Reklamdan Elde Edilen Gelir / Reklam Harcaması
+                  </span>
+                </span>
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="h-[300px] w-full mt-4">
                 <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={data} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                  <AreaChart data={chartData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                     <defs>
                       <linearGradient id="colorRoas" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3}/>
-                        <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0}/>
+                        <stop offset="5%" stopColor="#ED2970" stopOpacity={0.4}/>
+                        <stop offset="95%" stopColor="#ED2970" stopOpacity={0}/>
                       </linearGradient>
                     </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#27272a" vertical={false} />
-                    <XAxis dataKey="name" stroke="#52525b" axisLine={false} tickLine={false} />
-                    <YAxis stroke="#52525b" axisLine={false} tickLine={false} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
+                    <XAxis dataKey="name" stroke="#cbd5e1" axisLine={false} tickLine={false} tick={{fill: '#64748b', fontSize: 12, fontWeight: 500}} dy={10} />
+                    <YAxis stroke="#cbd5e1" axisLine={false} tickLine={false} tick={{fill: '#64748b', fontSize: 12, fontWeight: 500}} dx={-10} />
                     <Tooltip 
-                      contentStyle={{ backgroundColor: '#18181b', borderColor: '#27272a', borderRadius: '8px' }}
-                      itemStyle={{ color: '#fff' }}
+                      contentStyle={{ backgroundColor: '#ffffff', borderColor: '#f1f5f9', borderRadius: '16px', color: '#0f172a', boxShadow: '0 10px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)', padding: '12px 16px' }}
+                      itemStyle={{ color: '#ED2970', fontWeight: '900', fontSize: '16px' }}
+                      labelStyle={{ color: '#64748b', marginBottom: '8px', fontWeight: '600', textTransform: 'uppercase', fontSize: '11px', letterSpacing: '0.05em' }}
                     />
-                    <Area type="monotone" dataKey="roas" stroke="#8b5cf6" strokeWidth={3} fillOpacity={1} fill="url(#colorRoas)" />
+                    <Area type="monotone" dataKey="roas" stroke="#ED2970" strokeWidth={3} fillOpacity={1} fill="url(#colorRoas)" />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
@@ -107,35 +162,90 @@ export default function CompetitorInsightsPage() {
           </Card>
 
           {/* AI Reasoning Panel */}
-          <Card className="bg-gradient-to-b from-zinc-900/80 to-[#120d1d] border-zinc-800 border-t-primary/50 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-50"></div>
-            <CardHeader>
-              <div className="flex items-center gap-2 mb-2">
-                <BrainCircuit className="w-5 h-5 text-primary" />
-                <CardTitle className="text-lg">AI Strategic Insights</CardTitle>
+          <Card className="bg-gradient-to-b from-white to-pink-50/30 shadow-xl shadow-pink-100/50 border-pink-100 rounded-[2rem] relative overflow-hidden flex flex-col">
+            <div className="absolute top-0 right-0 w-full h-1.5 bg-gradient-to-r from-[#ED2970]/20 via-[#ED2970] to-[#ED2970]/20 opacity-80"></div>
+            <CardHeader className="pb-4">
+              <div className="flex items-center gap-3 mb-1">
+                <div className="bg-pink-100 p-2 rounded-xl">
+                  <BrainCircuit className="w-5 h-5 text-[#ED2970]" />
+                </div>
+                <CardTitle className="text-xl text-slate-800 font-black tracking-tight">AI Strategic Insights</CardTitle>
               </div>
-              <CardDescription>Aktif kampanyalarınız için yapay zeka tespitleri.</CardDescription>
+              <CardDescription className="text-slate-500 font-medium">Aktif kampanyalarınız için yapay zeka tespitleri.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               
-              <div className="bg-black/40 border border-red-500/20 rounded-lg p-4">
-                <div className="flex items-start gap-3">
-                  <div className="bg-red-500/20 p-1.5 rounded-full mt-0.5">
-                    <span className="w-2 h-2 rounded-full bg-red-500 block"></span>
+              {isAnalyzing ? (
+                 <div className="flex flex-col items-center justify-center flex-1 min-h-[240px] gap-4 text-slate-500">
+                    <Sparkles className="w-10 h-10 text-[#ED2970] animate-pulse" />
+                    <p className="text-sm font-bold tracking-wide animate-pulse">Yapay Zeka URL'yi tarıyor ve analiz ediyor...</p>
+                 </div>
+              ) : errorMsg ? (
+                <div className="flex flex-col items-center justify-center flex-1 min-h-[240px] text-center px-6 border-2 border-dashed border-red-200 rounded-3xl bg-red-50/50">
+                  <div className="bg-white w-12 h-12 flex items-center justify-center rounded-full shadow-sm border border-red-100 mb-4">
+                    <span className="text-red-500 font-black text-xl">!</span>
                   </div>
-                  <div>
-                    <h4 className="text-sm font-semibold text-white mb-1">Creative Hatası Tespit Edildi</h4>
-                    <p className="text-xs text-zinc-400 leading-relaxed">
-                      &quot;Yaz Koleksiyonu&quot; reklamınız düşük performans gösteriyor çünkü ürün ilk 2 saniyede ekranda belirmiyor. Kullanıcıların %68&apos;i ilk 3 saniyede videoyu kaydırıyor.
-
+                  <p className="text-sm text-red-600 font-bold leading-relaxed">{errorMsg}</p>
+                </div>
+              ) : analysisResult ? (
+                 <div className="space-y-4 animate-in fade-in duration-500 flex-1">
+                  {/* Summary */}
+                  <div className="bg-white border border-slate-100 shadow-sm rounded-2xl p-5">
+                    <p className="text-sm text-slate-600 font-medium leading-relaxed">
+                      {analysisResult.summary}
                     </p>
                   </div>
+
+                  {/* Weak Points */}
+                  <div className="bg-red-50/50 border border-red-100 rounded-2xl p-5">
+                    <div className="flex items-start gap-3">
+                      <div className="bg-red-100 p-2 rounded-xl mt-0.5 shadow-sm">
+                        <span className="w-2.5 h-2.5 rounded-full bg-red-500 block"></span>
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="text-[15px] font-black text-red-950 mb-3 tracking-tight">Zayıf Noktalar (Şikayetler)</h4>
+                        <ul className="space-y-2.5">
+                          {analysisResult.weak_points?.map((point: string, idx: number) => (
+                            <li key={idx} className="text-[13px] font-medium text-red-800 flex items-start gap-2.5 leading-relaxed bg-red-100/30 p-2 rounded-lg">
+                              <span className="text-red-500 mt-0.5">✖</span> <span>{point}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Opportunity & Pricing */}
+                  <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-5 shadow-sm">
+                    <div className="flex items-start gap-3">
+                      <div className="bg-emerald-100 p-2 rounded-xl mt-0.5 shadow-sm">
+                        <Check className="w-4 h-4 text-emerald-600 stroke-[3px]" />
+                      </div>
+                      <div>
+                        <h4 className="text-[15px] font-black text-emerald-950 mb-2 tracking-tight">Pazar Fırsatı & Fiyat Önerisi</h4>
+                        <p className="text-[13px] font-medium text-emerald-800 leading-relaxed mb-4">
+                          {analysisResult.opportunity}
+                        </p>
+                        <div className="inline-flex bg-white border border-emerald-200 text-emerald-700 shadow-sm font-black px-4 py-2 rounded-xl text-sm">
+                          Önerilen Satış Fiyatı: <span className="ml-1 text-emerald-600">{analysisResult.recommended_price} TL</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                 </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center flex-1 min-h-[240px] text-center px-6 border-2 border-dashed border-slate-200 rounded-3xl bg-slate-50/50">
+                  <div className="bg-white p-4 rounded-full shadow-sm border border-slate-100 mb-4">
+                    <BrainCircuit className="w-8 h-8 text-slate-300" />
+                  </div>
+                  <p className="text-sm text-slate-500 font-bold leading-relaxed max-w-[200px]">Analiz başlatmak için rakibinizin ürün linkini yukarıdaki alana girin.</p>
                 </div>
-              </div>
+              )}
             </CardContent>
           </Card>
         </div>
 
+        {/* --- NEW SECTION: ANALYZE COMPETITOR AD STRATEGIES --- */}
         <section className="relative z-10">
            <motion.div 
              initial={{ opacity: 0, y: 30 }}
