@@ -211,9 +211,9 @@ export default function CompetitorInsightsPage() {
                             </li>
                           ))}
                         </ul>
-                     </div>
-                   </div>
-                 </div>
+                      </div>
+                    </div>
+                  </div>
 
                   {/* Opportunity & Pricing */}
                   <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-5 shadow-sm">
@@ -242,10 +242,109 @@ export default function CompetitorInsightsPage() {
                 </div>
               )}
             </CardContent>
-         </Card>
-       </div>
+          </Card>
+        </div>
 
+        {/* --- NEW SECTION: ANALYZE COMPETITOR AD STRATEGIES --- */}
+        <section className="relative z-10">
+           <motion.div 
+             initial={{ opacity: 0, y: 30 }}
+             whileInView={{ opacity: 1, y: 0 }}
+             viewport={{ once: true }}
+             transition={{ duration: 0.8 }}
+           >
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                 <div className="flex flex-col justify-center">
+                    <h2 className="HeaderLabel text-3xl md:text-4xl text-[#0A0D14] mb-8 leading-[1.1]">
+                       Rakip reklam stratejilerini analiz edin
+                    </h2>
+                    <div className="space-y-4">
+                       <div className="flex items-center gap-4 text-slate-700 font-bold">
+                          <Check className="w-5 h-5 text-[#ED2970] stroke-[4px]" />
+                          <span>En iyi performans gösteren rakip reklamları belirleyin</span>
+                       </div>
+                       <div className="flex items-center gap-4 text-slate-700 font-bold">
+                          <Check className="w-5 h-5 text-[#ED2970] stroke-[4px]" />
+                          <span>Platformlar arası reklam performansını analiz edin</span>
+                       </div>
+                       <div className="flex items-center gap-4 text-slate-700 font-bold">
+                          <Check className="w-5 h-5 text-[#ED2970] stroke-[4px]" />
+                          <span>Pazarlama stratejilerinizde bir adım önde olun</span>
+                       </div>
+                    </div>
+                 </div>
 
+                 {/* Right Column: Visual Dashboard Mockup */}
+                 <div className="bg-[#FAF9FB] rounded-[3.5rem] p-8 md:p-12 border border-slate-50 relative flex flex-col gap-8 shadow-inner overflow-visible">
+                    
+                    {/* Top KPI Cards */}
+                    <div className="grid grid-cols-3 gap-3">
+                       <div className="bg-white p-4 rounded-3xl border border-white shadow-sm">
+                          <div className="flex justify-between items-center mb-2">
+                             <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Benzersiz Ziyaretçiler</span>
+                             <Users className="w-3 h-3 text-slate-100" />
+                          </div>
+                          <div className="text-xl font-black text-slate-900 leading-none">15K</div>
+                          <div className="text-[7px] text-emerald-500 font-bold mt-1">↑ 29.24%</div>
+                       </div>
+                       <div className="bg-white p-4 rounded-3xl border border-white shadow-sm">
+                          <div className="flex justify-between items-center mb-2">
+                             <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Ziyaret Sayısı</span>
+                             <TrendingUp className="w-3 h-3 text-slate-100" />
+                          </div>
+                          <div className="text-xl font-black text-slate-900 leading-none">65K</div>
+                          <div className="text-[7px] text-emerald-500 font-bold mt-1">↑ 13.56%</div>
+                       </div>
+                       <div className="bg-white p-4 rounded-3xl border border-white shadow-sm">
+                          <div className="flex justify-between items-center mb-2">
+                             <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Hemen Çıkma Oranı</span>
+                             <PieChart className="w-3 h-3 text-slate-100" />
+                          </div>
+                          <div className="text-xl font-black text-slate-900 leading-none">74%</div>
+                          <div className="text-[7px] text-rose-500 font-bold mt-1">↑ 22.65%</div>
+                       </div>
+                    </div>
+
+                    {/* Gender & Age Stats */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                       <div className="bg-white p-6 rounded-3xl border border-white shadow-sm space-y-4">
+                          <div className="text-[10px] font-black text-slate-800 uppercase tracking-widest italic">Cinsiyet</div>
+                          <div className="h-6 w-full bg-slate-50 rounded-full overflow-hidden flex relative p-1">
+                             <div className="h-full bg-[#ED2970] w-[42%] rounded-full flex items-center px-3 text-[8px] font-black text-white italic">42%</div>
+                             <div className="h-full flex-1 flex items-center justify-end px-3 text-[8px] font-bold text-slate-400">58%</div>
+                          </div>
+                       </div>
+                       <div className="bg-white p-6 rounded-3xl border border-white shadow-sm space-y-4">
+                          <div className="flex justify-between items-center">
+                             <span className="text-[10px] font-black text-slate-800 uppercase tracking-widest italic">Yaş Dağılımı</span>
+                             <div className="bg-slate-900 text-white text-[7px] font-bold px-1.5 py-0.5 rounded">34.4%</div>
+                          </div>
+                          <div className="flex items-end justify-between h-8 gap-2 px-1">
+                             {[
+                                { label: "18-24", h: 30 },
+                                { label: "24-30", h: 100, active: true },
+                                { label: "30-40", h: 60 },
+                                { label: "40-50", h: 40 },
+                                { label: "50-60", h: 30 },
+                                { label: "60+", h: 20 }
+                             ].map((item, i) => (
+                                <div key={i} className="flex-1 flex flex-col gap-1 items-center">
+                                   <div 
+                                      className={`w-full rounded-sm transition-all duration-700 ${item.active ? 'bg-[#ED2970]' : 'bg-slate-100'}`} 
+                                      style={{ height: `${item.h}%` }}
+                                   ></div>
+                                </div>
+                             ))}
+                          </div>
+                       </div>
+                    </div>
+                 </div>
+
+              </div>
+           </motion.div>
+        </section>
+
+        {/* --- SECTION 2: COMPREHENSIVE VISITOR ANALYSIS --- */}
         <section className="relative z-10">
            <motion.div 
              initial={{ opacity: 0, y: 30 }}
