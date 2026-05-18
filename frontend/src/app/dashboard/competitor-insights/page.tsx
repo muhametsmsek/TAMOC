@@ -2,7 +2,16 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Sparkles, Check, TrendingUp, Users, BarChart3, PieChart } from "lucide-react";
+import { Sparkles, Check, TrendingUp, Users, BarChart3, PieChart, BrainCircuit } from "lucide-react";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { ResponsiveContainer, AreaChart, CartesianGrid, XAxis, YAxis, Tooltip, Area } from "recharts";
+
+const data = [
+  { name: "Hafta 1", roas: 1.2 },
+  { name: "Hafta 2", roas: 1.5 },
+  { name: "Hafta 3", roas: 2.1 },
+  { name: "Hafta 4", roas: 2.8 },
+];
 
 export default function CompetitorInsightsPage() {
   const [url, setUrl] = useState("");
@@ -120,7 +129,25 @@ export default function CompetitorInsightsPage() {
                       &quot;Yaz Koleksiyonu&quot; reklamınız düşük performans gösteriyor çünkü ürün ilk 2 saniyede ekranda belirmiyor. Kullanıcıların %68&apos;i ilk 3 saniyede videoyu kaydırıyor.
 
                     </p>
-                    
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <section className="relative z-10">
+           <motion.div 
+             initial={{ opacity: 0, y: 30 }}
+             whileInView={{ opacity: 1, y: 0 }}
+             viewport={{ once: true }}
+             transition={{ duration: 0.8 }}
+           >
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                 <div className="flex flex-col justify-center">
+                    <h2 className="HeaderLabel text-3xl md:text-4xl text-[#0A0D14] mb-8 leading-[1.1]">
+                       Rakip reklam stratejilerini analiz edin
+                    </h2>
                     <div className="space-y-4">
                        <div className="flex items-center gap-4 text-slate-700 font-bold">
                           <Check className="w-5 h-5 text-[#ED2970] stroke-[4px]" />

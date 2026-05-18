@@ -23,8 +23,8 @@ export default function LandingPage() {
       iconColor: "text-cyan-500"
     },
     {
-      title: "Instagram Analizi",
-      description: "Profilinizi inceletin, içerik stratejinizi ve takipçi etkileşiminizi artıracak AI önerileri alın.",
+      title: "Sosyal Medya Analizi",
+      description: "Profilinizi inceletin; Instagram, TikTok, Facebook veya Meta Business hesaplarınız için AI tabanlı büyüme önerileri alın.",
       icon: LayoutGrid,
       href: "/instagram-analysis",
       color: "from-pink-500/20 to-rose-500/20",
