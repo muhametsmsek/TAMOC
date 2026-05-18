@@ -114,7 +114,7 @@ export default function AdCreativePage() {
     setCurrentTime(0);
     setMetaSuccess(false);
     
-    // Smooth progress loading pipeline simulation
+    // Smooth progress loading pipeline simulation - made slower for realism
     const interval = setInterval(() => {
       setRenderProgress((prev) => {
         if (prev >= 100) {
@@ -122,7 +122,7 @@ export default function AdCreativePage() {
           return 100;
         }
         
-        const nextProgress = prev + 1.2;
+        const nextProgress = prev + 0.8;
         if (nextProgress < 15) setRenderStep(0);
         else if (nextProgress < 35) setRenderStep(1);
         else if (nextProgress < 55) setRenderStep(2);
@@ -132,7 +132,7 @@ export default function AdCreativePage() {
         
         return Number(nextProgress.toFixed(1));
       });
-    }, 150);
+    }, 400);
     
     try {
       const response = await fetch("/api/generate-video-ad", {
@@ -159,7 +159,8 @@ export default function AdCreativePage() {
       setTimeout(() => {
         setVideoAdResult(data);
         setIsRendering(false);
-      }, 1000);
+        setIsPlaying(true); // Otomatik başlat
+      }, 1500);
       
     } catch (error) {
       console.error("Video rendering failed:", error);
@@ -192,6 +193,15 @@ export default function AdCreativePage() {
       (sub: any) => currentTime >= sub.start && currentTime < sub.end
     );
     return activeSub ? activeSub.text : "";
+  };
+
+  // Timed visual scene finder
+  const getActiveScene = () => {
+    if (!videoAdResult || !videoAdResult.visualScenes) return null;
+    const activeScene = videoAdResult.visualScenes.find(
+      (scene: any) => currentTime >= scene.start && currentTime < scene.end
+    );
+    return activeScene ? activeScene.description : null;
   };
 
   // Audio Equalizer bar animator
@@ -821,32 +831,54 @@ export default function AdCreativePage() {
                       <div className="relative w-full h-full bg-[#16131D] rounded-[2.5rem] overflow-hidden flex flex-col justify-between z-10 p-5">
                         
                         {/* Interactive Dynamic Video Canvas */}
-                        <div className="absolute inset-0 z-0 bg-slate-950">
-                          {/* Animated Color Glow for visual ad simulation */}
-                          <div className="absolute inset-0 bg-gradient-to-tr from-[#FFEDF4] to-[#F0F2FF] opacity-10" />
+                        <div className="absolute inset-0 z-0 bg-slate-950 overflow-hidden">
+                          {/* Cinematic Premium Background Image with Ken Burns effect */}
+                          <motion.div
+                            className="absolute inset-0 bg-cover bg-center opacity-80"
+                            style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop")' }}
+                            animate={{
+                              scale: isPlaying ? [1, 1.15, 1] : 1,
+                            }}
+                            transition={{ repeat: Infinity, duration: 15, ease: "linear" }}
+                          />
+                          
+                          {/* Dark vignette overlay for text readability */}
+                          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/80" />
                           
                           {/* A pulsing colored orb to mimic scene action when playing */}
                           <motion.div
-                            className="absolute rounded-full filter blur-[40px] opacity-40 bg-[#ED2970]"
+                            className="absolute rounded-full filter blur-[60px] opacity-40 bg-[#ED2970]"
                             animate={{
-                              width: isPlaying ? [180, 240, 180] : 180,
-                              height: isPlaying ? [180, 240, 180] : 180,
-                              left: isPlaying ? ["20%", "10%", "20%"] : "20%",
-                              top: isPlaying ? ["30%", "20%", "30%"] : "30%",
+                              width: isPlaying ? [200, 300, 200] : 200,
+                              height: isPlaying ? [200, 300, 200] : 200,
+                              left: isPlaying ? ["-20%", "40%", "-20%"] : "10%",
+                              top: isPlaying ? ["20%", "40%", "20%"] : "30%",
                             }}
-                            transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+                            transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
                           />
 
-                          <motion.div
-                            className="absolute rounded-full filter blur-[50px] opacity-30 bg-[#294BED]"
-                            animate={{
-                              width: isPlaying ? [150, 200, 150] : 150,
-                              height: isPlaying ? [150, 200, 150] : 150,
-                              right: isPlaying ? ["10%", "20%", "10%"] : "10%",
-                              bottom: isPlaying ? ["20%", "30%", "20%"] : "20%",
-                            }}
-                            transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
-                          />
+                          {/* Dynamic AI Visual Scene overlay inside the canvas */}
+                          <AnimatePresence mode="wait">
+                            {isPlaying && getActiveScene() && (
+                              <motion.div
+                                key={getActiveScene()}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0 }}
+                                className="absolute top-[20%] left-0 w-full px-6 flex justify-center pointer-events-none"
+                              >
+                                <div className="bg-black/60 backdrop-blur-md border border-white/20 p-3 rounded-2xl shadow-xl max-w-[200px]">
+                                  <div className="flex items-center gap-1.5 mb-1.5">
+                                    <div className="w-1.5 h-1.5 bg-[#ED2970] rounded-full animate-pulse" />
+                                    <span className="text-[7px] font-black uppercase tracking-widest text-[#ED2970]">AI Scene Director</span>
+                                  </div>
+                                  <p className="text-[9px] font-medium text-white/90 leading-relaxed italic">
+                                    {getActiveScene()}
+                                  </p>
+                                </div>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
                         </div>
 
                         {/* Top App Status Overlay */}

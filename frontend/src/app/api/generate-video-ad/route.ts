@@ -17,12 +17,17 @@ export async function POST(req: Request) {
 Sen profesyonel bir sosyal medya reklam video editörü ve kreatif direktörsün.
 Kullanıcının verdiği girdileri analiz ederek, yüksek dönüşüm oranına (conversion rate) sahip 15 saniyelik dikey video (Instagram Reels / TikTok / YouTube Shorts) reklamı için tam bir AI video üretim ve kurgu reçetesi hazırlayacaksın.
 
+1. Hedef Kitle Psikolojisi: Verilen kitleye en uygun duygusal tetikleyicileri (FOMO, Aidiyet, Başarı, Tasarruf vb.) belirle.
+2. Hook (Kanca): İlk 3 saniyede izleyiciyi ekrana kilitleyecek, scroll durdurucu (scroll-stopper) görsel ve işitsel şok etkisi yarat.
+3. Görsel Kalite (B-Roll): Hollywood seviyesinde veya en üst düzey UGC kalitesinde, renk paleti ve kamera açılarıyla detaylandırılmış sahne açıklamaları yaz.
+4. Ses ve Müzik: Ses tonu (Voice-over) ve müzik temposu (BPM) tam bir uyum içinde, duygu geçişlerini desteklemeli.
+
 Girdiler:
-- Ürün Açıklaması: ${product || "Kullanıcının yüklediği video içeriği"}
+- Ürün/Marka Özeti: ${product || "Kullanıcının yüklediği video içeriği"}
 - Hedef Kitle: ${audience || "Sosyal Medya Kullanıcıları"}
 - Reklam Amacı: ${goal || "Dönüşüm / Satış odaklı"}
 - Platform: ${platform || "TikTok & Instagram"}
-- Video Kurgu Stili: ${style || "UGC / Doğal içerik"}
+- Kreatif Video Stili: ${style || "UGC / Doğal içerik"}
 
 ${analysisContext && Object.keys(analysisContext).length > 0 ? `
 BUNA EK OLARAK, şu analiz verilerini de kullanarak stratejiyi güçlendir:
@@ -43,18 +48,18 @@ Yanıtın JSON formatında olmalı ve tam olarak şu yapıyı içermelidir:
   "musicTrack": "Önerilen müzik tarzı ve tempo (örn: TikTok Trend dynamic beat, 128 BPM).",
   "hookText": "İlk 3 saniyede ekranda belirecek çarpıcı ve büyük yazılacak Hook (Kanca) metni.",
   "subtitles": [
-    { "text": "İlk altyazı parçası (0-3 saniye arası)", "start": 0.0, "end": 3.0 },
-    { "text": "İkinci altyazı parçası (3-6 saniye arası)", "start": 3.0, "end": 6.0 },
-    { "text": "Üçüncü altyazı parçası (6-9 saniye arası)", "start": 6.0, "end": 9.0 },
-    { "text": "Dördüncü altyazı parçası (9-12 saniye arası)", "start": 9.0, "end": 12.0 },
-    { "text": "Eylem çağrısı ve CTA altyazı parçası (12-15 saniye arası)", "start": 12.0, "end": 15.0 }
+    { "text": "İlk altyazı (Örn: Bunu neden daha önce almadım?)", "start": 0.0, "end": 3.0 },
+    { "text": "İkinci altyazı parçası (Problemi vurgula)", "start": 3.0, "end": 6.0 },
+    { "text": "Üçüncü altyazı parçası (Çözüm ve ürün)", "start": 6.0, "end": 9.0 },
+    { "text": "Dördüncü altyazı parçası (Fayda / Sonuç)", "start": 9.0, "end": 12.0 },
+    { "text": "Eylem çağrısı ve CTA altyazı parçası", "start": 12.0, "end": 15.0 }
   ],
   "visualScenes": [
-    { "sceneNumber": 1, "description": "İlk 3 saniyede gösterilecek heyecan verici ve merak uyandırıcı ürün açılış karesi.", "duration": 3.0 },
-    { "sceneNumber": 2, "description": "Ürünün en önemli problemini çözerken gösterilen kullanım detayı.", "duration": 3.0 },
-    { "sceneNumber": 3, "description": "UGC tarzında bir kullanıcının veya modelin ürünü deneyimleyip mutlu olduğu an.", "duration": 3.0 },
-    { "sceneNumber": 4, "description": "Ürünün kalitesini veya detaylarını gösteren yakın çekim makro geçiş efekti.", "duration": 3.0 },
-    { "sceneNumber": 5, "description": "İndirim, kampanya veya call-to-action (CTA) metninin yer aldığı bitiş karesi.", "duration": 3.0 }
+    { "sceneNumber": 1, "description": "Detaylı sahne yönetmenliği: Kamera açısı, aydınlatma (Örn: Neon arka plan), oyuncu aksiyonu. (0-3 saniye)", "start": 0.0, "end": 3.0 },
+    { "sceneNumber": 2, "description": "Yakın çekim ürün detayı, dinamik geçiş, ışık yansıması. (3-6 saniye)", "start": 3.0, "end": 6.0 },
+    { "sceneNumber": 3, "description": "Ürünün kullanım anındaki memnuniyet ifadesi, yavaş çekim (slow-mo). (6-9 saniye)", "start": 6.0, "end": 9.0 },
+    { "sceneNumber": 4, "description": "Öncesi/Sonrası (Before/After) veya hızlı kesmelerle ürünün kalitesinin kanıtı. (9-12 saniye)", "start": 9.0, "end": 12.0 },
+    { "sceneNumber": 5, "description": "Kapanış: Ekranda büyük harflerle indirim/fırsat yazısı, logomuz, harekete geçirici buton efekti. (12-15 saniye)", "start": 12.0, "end": 15.0 }
   ],
   "ctaText": "CTA butonunda yazacak metin (örn: ŞİMDİ AL & %20 İNDİRİMİ YAKALA)"
 }
