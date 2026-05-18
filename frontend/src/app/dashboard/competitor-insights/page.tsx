@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Sparkles, Check, TrendingUp, Users, BarChart3, PieChart, BrainCircuit } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
@@ -16,12 +16,32 @@ const defaultChartData = [
   { name: '7. Hafta', roas: 4.8 },
 ];
 
+const loadingTexts = [
+  "Sayfa taranıyor...",
+  "Müşteri şikayetleri okunuyor...",
+  "Rakip stratejisi çözülüyor...",
+  "Yapay zeka sonuçları derliyor..."
+];
+
 export default function CompetitorInsightsPage() {
   const [url, setUrl] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<any>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [chartData, setChartData] = useState(defaultChartData);
+  const [loadingTextIndex, setLoadingTextIndex] = useState(0);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (isAnalyzing) {
+      interval = setInterval(() => {
+        setLoadingTextIndex((prev) => (prev + 1) % loadingTexts.length);
+      }, 3000);
+    } else {
+      setLoadingTextIndex(0);
+    }
+    return () => clearInterval(interval);
+  }, [isAnalyzing]);
 
   const handleAnalyze = async () => {
     if (!url) return;
@@ -178,7 +198,7 @@ export default function CompetitorInsightsPage() {
               {isAnalyzing ? (
                  <div className="flex flex-col items-center justify-center flex-1 min-h-[240px] gap-4 text-slate-500">
                     <Sparkles className="w-10 h-10 text-[#ED2970] animate-pulse" />
-                    <p className="text-sm font-bold tracking-wide animate-pulse">Yapay Zeka URL'yi tarıyor ve analiz ediyor...</p>
+                    <p className="text-sm font-bold tracking-wide animate-pulse transition-all duration-500">{loadingTexts[loadingTextIndex]}</p>
                  </div>
               ) : errorMsg ? (
                 <div className="flex flex-col items-center justify-center flex-1 min-h-[240px] text-center px-6 border-2 border-dashed border-red-200 rounded-3xl bg-red-50/50">
