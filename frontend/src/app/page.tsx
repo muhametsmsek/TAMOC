@@ -23,20 +23,22 @@ export default function LandingPage() {
       iconColor: "text-cyan-500"
     },
     {
-      title: "Instagram Analizi",
-      description: "Profilinizi inceletin, içerik stratejinizi ve takipçi etkileşiminizi artıracak AI önerileri alın.",
+      title: "Sosyal Medya Analizi",
+      description: "Profilinizi inceletin; Instagram, TikTok, Facebook veya Meta Business hesaplarınız için AI tabanlı büyüme önerileri alın.",
       icon: LayoutGrid,
-      href: "/dashboard/instagram-analyzer",
-      color: "from-pink-500/10 to-rose-500/10",
-      iconColor: "text-rose-500"
+      href: "/instagram-analysis",
+      color: "from-pink-500/20 to-rose-500/20",
+      iconColor: "text-rose-400"
+
     },
     {
       title: "Mağaza & Ürün Analizi",
       description: "Shopify/E-ticaret sitenizi taratarak dönüşüm oranını (CRO) artıracak eksiklikleri bulun.",
       icon: Store,
-      href: "/dashboard/store-analyzer",
-      color: "from-emerald-500/10 to-teal-500/10",
-      iconColor: "text-teal-500"
+      href: "/store-analysis",
+      color: "from-emerald-500/20 to-teal-500/20",
+      iconColor: "text-teal-400"
+
     }
   ];
 

@@ -2,7 +2,16 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Sparkles, Check, TrendingUp, Users, BarChart3, PieChart } from "lucide-react";
+import { Sparkles, Check, TrendingUp, Users, BarChart3, PieChart, BrainCircuit } from "lucide-react";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { ResponsiveContainer, AreaChart, CartesianGrid, XAxis, YAxis, Tooltip, Area } from "recharts";
+
+const data = [
+  { name: "Hafta 1", roas: 1.2 },
+  { name: "Hafta 2", roas: 1.5 },
+  { name: "Hafta 3", roas: 2.1 },
+  { name: "Hafta 4", roas: 2.8 },
+];
 
 export default function CompetitorInsightsPage() {
   const [url, setUrl] = useState("");
@@ -65,27 +74,80 @@ export default function CompetitorInsightsPage() {
           </motion.div>
         </div>
 
-        {/* --- SECTION 1: COMPETITOR INTELLIGENCE --- */}
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Chart Section */}
+          <Card className="col-span-2 bg-zinc-900/50 border-zinc-800">
+            <CardHeader>
+              <CardTitle>Performans Trendi (ROAS vs Harcama)</CardTitle>
+              <CardDescription>Sektörel rakiplerinizle kıyaslamalı haftalık bazda reklam getirisi.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="h-[300px] w-full mt-4">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={data} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                    <defs>
+                      <linearGradient id="colorRoas" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3}/>
+                        <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0}/>
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#27272a" vertical={false} />
+                    <XAxis dataKey="name" stroke="#52525b" axisLine={false} tickLine={false} />
+                    <YAxis stroke="#52525b" axisLine={false} tickLine={false} />
+                    <Tooltip 
+                      contentStyle={{ backgroundColor: '#18181b', borderColor: '#27272a', borderRadius: '8px' }}
+                      itemStyle={{ color: '#fff' }}
+                    />
+                    <Area type="monotone" dataKey="roas" stroke="#8b5cf6" strokeWidth={3} fillOpacity={1} fill="url(#colorRoas)" />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* AI Reasoning Panel */}
+          <Card className="bg-gradient-to-b from-zinc-900/80 to-[#120d1d] border-zinc-800 border-t-primary/50 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-50"></div>
+            <CardHeader>
+              <div className="flex items-center gap-2 mb-2">
+                <BrainCircuit className="w-5 h-5 text-primary" />
+                <CardTitle className="text-lg">AI Strategic Insights</CardTitle>
+              </div>
+              <CardDescription>Aktif kampanyalarınız için yapay zeka tespitleri.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              
+              <div className="bg-black/40 border border-red-500/20 rounded-lg p-4">
+                <div className="flex items-start gap-3">
+                  <div className="bg-red-500/20 p-1.5 rounded-full mt-0.5">
+                    <span className="w-2 h-2 rounded-full bg-red-500 block"></span>
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-semibold text-white mb-1">Creative Hatası Tespit Edildi</h4>
+                    <p className="text-xs text-zinc-400 leading-relaxed">
+                      &quot;Yaz Koleksiyonu&quot; reklamınız düşük performans gösteriyor çünkü ürün ilk 2 saniyede ekranda belirmiyor. Kullanıcıların %68&apos;i ilk 3 saniyede videoyu kaydırıyor.
+
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
         <section className="relative z-10">
            <motion.div 
              initial={{ opacity: 0, y: 30 }}
              whileInView={{ opacity: 1, y: 0 }}
              viewport={{ once: true }}
              transition={{ duration: 0.8 }}
-             className="bg-white rounded-[4rem] p-8 md:p-16 shadow-[0_50px_120px_rgba(0,0,0,0.06)] border border-white relative overflow-visible"
            >
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center relative z-10">
-                 
-                 {/* Left Column: Text Content */}
-                 <div className="flex flex-col justify-center overflow-visible">
-                    {/* Pink Sub-header removed as requested */}
-                    <h2 className="HeaderLabel text-3xl md:text-5xl text-[#0A0D14] mb-8 leading-[1.1]">
-                       Sınıfının en iyisi reklam zekası
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                 <div className="flex flex-col justify-center">
+                    <h2 className="HeaderLabel text-3xl md:text-4xl text-[#0A0D14] mb-8 leading-[1.1]">
+                       Rakip reklam stratejilerini analiz edin
                     </h2>
-                    <p className="text-[#4B5563] text-lg leading-relaxed mb-10 font-medium opacity-80">
-                       Yapay zeka sayesinde, tüm platformlarda rakiplerinizin en iyi performans gösteren reklam öğelerini keşfetmenizi sağlar. Bu verileri analiz ederek işe yarayan stratejileri belirleyebilir ve pazarlama çalışmalarınızda bir adım önde olabilirsiniz.
-                    </p>
-                    
                     <div className="space-y-4">
                        <div className="flex items-center gap-4 text-slate-700 font-bold">
                           <Check className="w-5 h-5 text-[#ED2970] stroke-[4px]" />
