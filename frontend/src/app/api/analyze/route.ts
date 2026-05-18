@@ -72,9 +72,14 @@ export async function POST(request: Request) {
             recommended_price: {
                 type: SchemaType.NUMBER,
                 description: "Satıcının piyasa ile rekabet etmesi için önerilen TL bazında satış fiyatı"
+            },
+            estimated_roas_trend: {
+              type: SchemaType.ARRAY,
+              items: { type: SchemaType.NUMBER },
+              description: "Bu ürünün veya sektörün son 7 haftalık tahmini (beklenen) sektörel ortalama ROAS değerleri. (Örn: [2.1, 2.4, 2.2, 3.1, 3.5, 3.2, 4.0]). Mutlaka 7 adet mantıklı ondalık sayı içermelidir."
             }
           },
-          required: ["weak_points", "summary", "opportunity", "recommended_price"],
+          required: ["weak_points", "summary", "opportunity", "recommended_price", "estimated_roas_trend"],
         },
       },
     });
@@ -84,9 +89,10 @@ export async function POST(request: Request) {
       Sen e-ticaret verilerini analiz eden uzman bir stratejistsin.
       Kullanıcı sana şu linki verdi: ${url}
       Bu linkten okuyabildiğimiz kadarıyla sayfanın ham metin içeriği aşağıdadır.
-      Eğer metin anlamsızsa veya analiz edilebilecek veri yoksa, kendi yeteneklerini kullanarak linkteki ürünü/sayfayı analiz etmeye çalış.
+      Eğer metin anlamsızsa veya analiz edilebilecek veri yoksa, kendi yeteneklerini kullanarak linkteki ürünü/sayfayı/sektörü analiz etmeye çalış.
       Lütfen bu veriyi veya link bilgisini dikkatlice kullanarak biz (rakip satıcı) için zayıf noktaları ve fırsatları bul.
-      Eğer sayfada hiçbir mantıklı bilgi yoksa, summary kısmına "Yeterli analiz verisi bulunamadı" şeklinde belirt.
+      Ayrıca bu ürünün bulunduğu sektörü/kategoriyi tahmin et ve bu sektöre uygun, mantıklı bir 7 haftalık ROAS (Return on Ad Spend) trendi üret.
+      Eğer sayfada hiçbir mantıklı bilgi yoksa, summary kısmına "Yeterli analiz verisi bulunamadı" şeklinde belirt ancak yine de tahmin yürüterek 7 adet ROAS verisi doldur.
       
       Web Sayfasından Okunan Ham Veri:
       ${pageContent}

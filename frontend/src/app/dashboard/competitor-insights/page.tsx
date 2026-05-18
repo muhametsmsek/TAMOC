@@ -6,7 +6,7 @@ import { Sparkles, Check, TrendingUp, Users, BarChart3, PieChart, BrainCircuit }
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { ResponsiveContainer, CartesianGrid, XAxis, YAxis, Tooltip, Area, AreaChart } from "recharts";
 
-const chartData = [
+const defaultChartData = [
   { name: '1. Hafta', roas: 2.4 },
   { name: '2. Hafta', roas: 3.1 },
   { name: '3. Hafta', roas: 2.8 },
@@ -21,12 +21,15 @@ export default function CompetitorInsightsPage() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<any>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [chartData, setChartData] = useState(defaultChartData);
 
   const handleAnalyze = async () => {
     if (!url) return;
     setIsAnalyzing(true);
     setAnalysisResult(null); // Önceki sonuçları temizle
     setErrorMsg(null); // Varsa önceki hatayı temizle
+    // Analiz başlarken grafiği boş veya bekleyen hale getirebiliriz ama görsel güzel kalsın diye varsayılanda bırakabiliriz.
+    
     try {
       const res = await fetch('/api/analyze', {
         method: 'POST',
@@ -38,6 +41,15 @@ export default function CompetitorInsightsPage() {
         throw new Error(data.error || "Analiz sırasında bir hata oluştu.");
       }
       setAnalysisResult(data);
+      
+      // API'den dönen tahmini ROAS verisini grafiğe yansıt
+      if (data.estimated_roas_trend && Array.isArray(data.estimated_roas_trend)) {
+        const newChartData = data.estimated_roas_trend.map((val: number, index: number) => ({
+          name: `${index + 1}. Hafta`,
+          roas: val
+        }));
+        setChartData(newChartData);
+      }
     } catch (error: any) {
       console.error("Analiz hatası:", error);
       let friendlyError = error.message || "Analiz sırasında bir hata oluştu.";
