@@ -27,14 +27,20 @@ import {
   Sliders,
   Gauge,
   Scissors,
-  Share2
+  Share2,
+  Database,
+  CheckSquare
 } from "lucide-react";
+import { useAnalysis } from "@/context/AnalysisContext";
 
 export default function AdCreativePage() {
   // Existing States for Strategy
   const [prompt, setPrompt] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [strategy, setStrategy] = useState<any>(null);
+  
+  // Use Analysis Context
+  const { data: analysisContext } = useAnalysis();
 
   // Tab State: "strategy" (original design) vs "video" (new requested features)
   const [activeTab, setActiveTab] = useState<"strategy" | "video">("strategy");
@@ -83,7 +89,7 @@ export default function AdCreativePage() {
       const response = await fetch("/api/generate-strategy", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt }),
+        body: JSON.stringify({ prompt, analysisContext }),
       });
       
       const data = await response.json();
@@ -138,7 +144,8 @@ export default function AdCreativePage() {
           goal: adGoal,
           platform: selectedPlatform,
           style: videoStyle,
-          videoUploaded: editTab === "edit"
+          videoUploaded: editTab === "edit",
+          analysisContext
         }),
       });
       
@@ -285,6 +292,29 @@ export default function AdCreativePage() {
               <span>AI Video Stüdyosu</span>
             </button>
           </div>
+
+          {/* Connected Data Indicator */}
+          <div className="flex flex-wrap items-center gap-2 mt-4">
+            <div className="flex items-center gap-1.5 px-3 py-1 bg-slate-100 rounded-full border border-slate-200">
+              <Database className="w-3.5 h-3.5 text-slate-400" />
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Bağlı Analizler:</span>
+            </div>
+            
+            <div className={`flex items-center gap-1.5 px-3 py-1 rounded-full border transition-all ${analysisContext?.storeAnalysis ? "bg-emerald-50 border-emerald-200 text-emerald-600" : "bg-white border-slate-200 text-slate-400"}`}>
+              {analysisContext?.storeAnalysis ? <CheckSquare className="w-3.5 h-3.5" /> : <div className="w-3.5 h-3.5 rounded-sm border border-slate-300" />}
+              <span className="text-[10px] font-bold uppercase">Mağaza</span>
+            </div>
+
+            <div className={`flex items-center gap-1.5 px-3 py-1 rounded-full border transition-all ${analysisContext?.competitorAnalysis ? "bg-emerald-50 border-emerald-200 text-emerald-600" : "bg-white border-slate-200 text-slate-400"}`}>
+              {analysisContext?.competitorAnalysis ? <CheckSquare className="w-3.5 h-3.5" /> : <div className="w-3.5 h-3.5 rounded-sm border border-slate-300" />}
+              <span className="text-[10px] font-bold uppercase">Rakip</span>
+            </div>
+
+            <div className={`flex items-center gap-1.5 px-3 py-1 rounded-full border transition-all ${analysisContext?.socialMediaAnalysis ? "bg-emerald-50 border-emerald-200 text-emerald-600" : "bg-white border-slate-200 text-slate-400"}`}>
+              {analysisContext?.socialMediaAnalysis ? <CheckSquare className="w-3.5 h-3.5" /> : <div className="w-3.5 h-3.5 rounded-sm border border-slate-300" />}
+              <span className="text-[10px] font-bold uppercase">Sosyal Medya</span>
+            </div>
+          </div>
         </div>
 
         {/* --- TAB 1: ORIGINAL STRATEGY WORKFLOW --- */}
@@ -349,6 +379,18 @@ export default function AdCreativePage() {
                        <p className="text-[#4B5563] text-xl font-medium opacity-80 leading-relaxed max-w-4xl italic">
                           "{strategy.summary}"
                        </p>
+                       
+                       {strategy.aiReasoning && (
+                         <div className="mt-6 bg-slate-900 rounded-2xl p-5 border border-slate-800 flex items-start gap-3 w-fit max-w-3xl">
+                           <div className="w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center shrink-0">
+                             <Database className="w-4 h-4" />
+                           </div>
+                           <div>
+                             <h4 className="text-xs font-black uppercase text-indigo-400 tracking-widest mb-1">AI Strateji Mantığı (Bağlı Veriler)</h4>
+                             <p className="text-sm font-medium text-slate-300 leading-relaxed">{strategy.aiReasoning}</p>
+                           </div>
+                         </div>
+                       )}
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -924,6 +966,18 @@ export default function AdCreativePage() {
                       <div className="flex flex-col gap-2">
                         <span className="text-xs font-bold text-slate-700">Müzik Temposu: <span className="text-slate-500 font-semibold">{videoAdResult.musicTrack}</span></span>
                         <span className="text-xs font-bold text-slate-700">Seslendirme Metni: <span className="text-slate-500 font-semibold italic">"{videoAdResult.voiceOverScript}"</span></span>
+                        
+                        {videoAdResult.aiReasoning && (
+                          <div className="mt-3 bg-slate-50 rounded-xl p-4 border border-slate-100">
+                            <span className="flex items-center gap-1.5 text-[10px] font-black uppercase text-[#ED2970] tracking-widest mb-1.5">
+                              <Database className="w-3.5 h-3.5" />
+                              Bağlı Veri Stratejisi
+                            </span>
+                            <span className="text-xs text-slate-600 font-medium leading-relaxed block">
+                              {videoAdResult.aiReasoning}
+                            </span>
+                          </div>
+                        )}
                       </div>
 
                       {/* Direct Meta ads manager transfer */}

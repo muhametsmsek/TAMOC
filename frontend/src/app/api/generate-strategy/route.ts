@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const { prompt, context } = await req.json();
+    const { prompt, context, analysisContext } = await req.json();
 
     if (!prompt) {
       return NextResponse.json({ error: "Prompt is required" }, { status: 400 });
@@ -17,6 +17,11 @@ export async function POST(req: Request) {
 Sen profesyonel bir dijital reklam stratejisti ve kreatif direktörsün. 
 Kullanıcının verdiği kısa reklam fikrini analiz ederek, "profesyonel reklam ajansı kalitesinde" kapsamlı bir strateji raporu hazırlayacaksın.
 
+${analysisContext && Object.keys(analysisContext).length > 0 ? `
+BUNA EK OLARAK, kullanıcının daha önceki Mağaza, Rakip veya Sosyal Medya analiz verileri aşağıdadır. Lütfen bu verileri de dikkate alarak reklam stratejisini zenginleştir ve zayıflıkları avantaja çevir:
+${JSON.stringify(analysisContext, null, 2)}
+` : ''}
+
 Yanıtın şu bölümleri içermeli ve her biri detaylı olmalıdır:
 
 1. **Görsel Tasarım & Konsept:** Hangi renk paletleri, ne tarz görseller ve nasıl bir atmosfer kullanılmalı?
@@ -30,6 +35,7 @@ Yanıtın şu bölümleri içermeli ve her biri detaylı olmalıdır:
 Yanıtın formatı JSON olmalı ve şu yapıda olmalı:
 {
   "summary": "Kısa bir özet",
+  "aiReasoning": "Bu stratejiyi seçmendeki en önemli pazarlama analitiği / ürün psikolojisi (Örn: Rakipler testimonial format kullanıyor ancak problem-solution angle boş bırakılmış, bu yüzden... vs.)",
   "visuals": { "colors": "...", "concepts": "..." },
   "video": { "length": "...", "style": "...", "ugc": "...", "voice": "..." },
   "typography": "...",

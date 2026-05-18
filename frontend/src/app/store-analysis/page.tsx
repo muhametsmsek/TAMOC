@@ -4,11 +4,13 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Sparkles, ArrowLeft, Store, AlertTriangle, ShieldCheck, MousePointerClick, ShoppingCart, CheckSquare } from "lucide-react";
 import Link from "next/link";
+import { useAnalysis } from "@/context/AnalysisContext";
 
 export default function StoreAnalysisPage() {
   const [url, setUrl] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [showResults, setShowResults] = useState(false);
+  const { setStoreAnalysis } = useAnalysis();
 
   const handleAnalyze = (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,6 +21,18 @@ export default function StoreAnalysisPage() {
     setTimeout(() => {
       setIsAnalyzing(false);
       setShowResults(true);
+      
+      // MOCK SAVE DATA TO CONTEXT
+      setStoreAnalysis({
+        score: 58,
+        issues: [
+          "Ürün görselleri arasında video veya 3D gösterim yok.",
+          "Sepete ekle butonunun hemen altına güvenli ödeme (SSL, iyzico, vb.) ikonları eksik.",
+          "Üstü çizili fiyat taktiği kullanılmıyor."
+        ],
+        productUrl: url,
+        recommendation: "Aciliyet hissi uyandıracak ve mobil satın almayı hızlandıracak butonlar eklenmeli."
+      });
     }, 2000);
   };
 

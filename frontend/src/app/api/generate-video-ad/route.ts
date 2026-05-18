@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const { product, audience, goal, platform, style, videoUploaded } = await req.json();
+    const { product, audience, goal, platform, style, videoUploaded, analysisContext } = await req.json();
 
     if (!product && !videoUploaded) {
       return NextResponse.json({ error: "Product description or video upload is required" }, { status: 400 });
@@ -24,11 +24,21 @@ Girdiler:
 - Platform: ${platform || "TikTok & Instagram"}
 - Video Kurgu Stili: ${style || "UGC / Doğal içerik"}
 
-Bu verilere dayanarak, videoda kullanılacak yapay zeka seslendirme metnini (voice-over script), sahne sahne kurgu talimatlarını, müzik temposunu, otomatik oluşturulacak zaman damgalı altyazıları (subtitles) ve ilk 3 saniyede ekranın ortasında patlayacak "Hook" (kanca) yazısını tasarlamalısın.
+${analysisContext && Object.keys(analysisContext).length > 0 ? `
+BUNA EK OLARAK, şu analiz verilerini de kullanarak stratejiyi güçlendir:
+${JSON.stringify(analysisContext, null, 2)}
+
+ÇIKTI KURALLARI:
+- Rakiplerin zayıf yönlerini (varsa) ve ürün analizindeki zayıflıkları avantaja çevir.
+- Hedef kitlenin demografisine göre dili ve hook'ları seç.
+` : ''}
+
+Bu verilere dayanarak, videoda kullanılacak yapay zeka seslendirme metnini (voice-over script), sahne sahne kurgu talimatlarını, müzik temposunu, otomatik oluşturulacak zaman damgalı altyazıları (subtitles), ilk 3 saniyede ekranın ortasında patlayacak "Hook" (kanca) yazısını tasarlamalısın. Ek olarak, ürettiğin reklam kreatifi ile ilgili "aiReasoning" (AI mantığı) adında bir açıklama yazmalısın.
 
 Yanıtın JSON formatında olmalı ve tam olarak şu yapıyı içermelidir:
 {
   "scenarioSummary": "Senaryonun kısa ve etkileyici özeti (Türkçe).",
+  "aiReasoning": "Bu stratejiyi neden seçtiğine dair 2-3 cümlelik analitik pazarlama mantığı (Örn: Rakipler testimonial kullanıyor ama x açısını kaçırmış, kadın hedef kitle için y duygusu seçildi, vs.)",
   "voiceOverScript": "Yapay zekanın seslendireceği tam metin (15 saniyeye uygun, yaklaşık 30-40 kelime, Türkçe).",
   "musicTrack": "Önerilen müzik tarzı ve tempo (örn: TikTok Trend dynamic beat, 128 BPM).",
   "hookText": "İlk 3 saniyede ekranda belirecek çarpıcı ve büyük yazılacak Hook (Kanca) metni.",

@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Sparkles, Check, TrendingUp, Users, BarChart3, PieChart, BrainCircuit } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { ResponsiveContainer, CartesianGrid, XAxis, YAxis, Tooltip, Area, AreaChart } from "recharts";
+import { useAnalysis } from "@/context/AnalysisContext";
 
 const defaultChartData = [
   { name: '1. Hafta', roas: 2.4 },
@@ -22,6 +23,7 @@ export default function CompetitorInsightsPage() {
   const [analysisResult, setAnalysisResult] = useState<any>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [chartData, setChartData] = useState(defaultChartData);
+  const { setCompetitorAnalysis } = useAnalysis();
 
   const handleAnalyze = async () => {
     if (!url) return;
@@ -41,6 +43,7 @@ export default function CompetitorInsightsPage() {
         throw new Error(data.error || "Analiz sırasında bir hata oluştu.");
       }
       setAnalysisResult(data);
+      setCompetitorAnalysis(data);
       
       // API'den dönen tahmini ROAS verisini grafiğe yansıt
       if (data.estimated_roas_trend && Array.isArray(data.estimated_roas_trend)) {

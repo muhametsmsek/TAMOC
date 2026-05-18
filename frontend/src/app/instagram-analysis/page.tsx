@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Sparkles, ArrowLeft, Camera, Upload, CheckCircle2, TrendingUp, Clock, Lightbulb, Image as ImageIcon, Users, CalendarDays, Swords, PenTool, AlertTriangle, ListChecks, BarChart, Play } from "lucide-react";
 import Link from "next/link";
+import { useAnalysis } from "@/context/AnalysisContext";
 
 interface AnalysisData {
   profileScore: number;
@@ -30,6 +31,7 @@ export default function InstagramAnalysisPage() {
   const [error, setError] = useState<string | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [imageFileName, setImageFileName] = useState<string | null>(null);
+  const { setSocialMediaAnalysis } = useAnalysis();
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -71,6 +73,7 @@ export default function InstagramAnalysisPage() {
       }
 
       setAnalysisData(data);
+      setSocialMediaAnalysis(data);
       setShowResults(true);
     } catch (err: any) {
       setError(err.message || 'Bilinmeyen bir hata oluştu.');
