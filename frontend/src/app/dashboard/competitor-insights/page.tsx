@@ -15,7 +15,6 @@ const defaultChartData = [
   { name: '6. Hafta', roas: 5.1 },
   { name: '7. Hafta', roas: 4.8 },
 ];
-
 const loadingTexts = [
   "Sayfa taranıyor...",
   "Müşteri şikayetleri okunuyor...",
